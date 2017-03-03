@@ -83,12 +83,15 @@ void BFSTrave(){
 int n;
 int G[maxv][maxv];
 bool vis[maxv] = {false};
-int d[maxv];//所求点到各点的最短路径长度
-fill(d, d + maxv, INF);//初始化，一开始路径长度都是无穷大
 
-void dijkstra(int s){//s为所求点
-	d[s] = 0;//初始化d[s]，关键，这样才能做下去……
+int d[maxv];//所求点到各点的最短路径长度
+//初始化
+fill(d, d + maxv, INF);//一开始假设除了自己之外，所有点都不连通
+d[s] = 0;
+
+void dijkstra(int s){
 	for(int i = 0; i < n; i++){//这个循环单纯的是循环次数，最多要循环n次
+		//第一步，找到d[u]最小且没有访问过的节点
 		int min = INF; u = -1;//u当然可以一开始不赋值，这样做是起到一个flag的作用
 		for(int j = 0; j < n; j++){//枚举，要找出d[j]最小的点
 			if(vis[j] == false && d[j] < min){
@@ -98,7 +101,7 @@ void dijkstra(int s){//s为所求点
 		}
 		if(u == -1) return;//提前结束循环，精简程序
 		
-		//以u为中介，开始更新d[]
+		//第二步，以u为中介，开始更新d[]
 		vis[u] = true;
 		for(int v = 0; v < n; v++){
 			if(vis[v] == false && G[u][v] < INF && d[u] + G[u][v] < d[v]){//没被访问且u可到达且以u为中介更优
